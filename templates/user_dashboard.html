@@ -11,6 +11,13 @@
     <h2>Your Resume</h2>
     <p>{{ user['resume'] }}</p>
 
+    <h2>Additional Description</h2>
+    <form action="/user/update_description" method="POST">
+        <textarea name="description" rows="4" cols="50" placeholder="Add extra details about your skills...">{{ user['description'] }}</textarea>
+        <br>
+        <input type="submit" value="Update">
+    </form>
+
     <h2>Applied Jobs</h2>
     <ul>
         {% for job in applied_jobs %}
