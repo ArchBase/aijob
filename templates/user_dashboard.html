@@ -17,8 +17,10 @@
     <form action="/user/update_description" method="POST">
         <textarea name="description" rows="4" cols="50" placeholder="Add extra details about your skills...">{{ user['description'] }}</textarea>
         <br>
-        <input type="submit" value="Update">
+        <input type="submit" value="Update Description">
     </form>
+    
+    <a href="/user/find_jobs"><button>Find Jobs</button></a>
 
     <h2>Applied Jobs</h2>
     <ul>
@@ -28,7 +30,5 @@
             </li>
         {% endfor %}
     </ul>
-
-    <a href="/user/find_jobs"><button>Find Jobs</button></a>
 </body>
 </html>
