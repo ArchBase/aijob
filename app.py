@@ -138,5 +138,33 @@ def view_statistics(job_id):
                             (job_id,)).fetchall()
     return render_template("view_statistics.html", applicants=applicants)
 
+ # --- View Applicant ---
+@app.route("/recruiter/view_applicant/<int:application_id>", methods=["GET", "POST"])
+def view_applicant(application_id):
+    if "recruiter_id" not in session:
+        return redirect("/recruiter/login")
+    
+    db = get_db()
+    
+    # Fetch applicant details
+    application = db.execute(
+        "SELECT applications.id AS app_id, users.resume, applications.status FROM applications "
+        "JOIN users ON applications.user_id = users.id WHERE applications.id = ?",
+        (application_id,)
+    ).fetchone()
+    
+    if not application:
+        return "Application not found", 404
+    
+    if request.method == "POST":
+        action = request.form.get("action")
+        if action in ["Accept", "Reject"]:
+            db.execute("UPDATE applications SET status = ? WHERE id = ?", (action, application_id))
+            db.commit()
+            return redirect("/recruiter/dashboard")
+
+    return render_template("view_applicant.html", resume=application["resume"])
+
+
 if __name__ == "__main__":
     app.run(debug=True)
