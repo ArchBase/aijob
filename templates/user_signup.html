@@ -5,13 +5,15 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>User Signup</h1>
-    <form method="post">
-        Username: <input type="text" name="username" required><br>
-        Password: <input type="password" name="password" required><br>
-        Resume:<br> <textarea name="resume" required></textarea><br>
-        <input type="submit" value="Signup">
-    </form>
-    <a href="/">Home</a>
+    <div class="login-box">
+        <h1>User Signup</h1>
+        <form method="post">
+            Username: <input type="text" name="username" required><br>
+            Password: <input type="password" name="password" required><br>
+            Resume:<br> <textarea name="resume" required></textarea><br>
+            <input type="submit" value="Signup">
+        </form>
+        <a href="/">Back to Homepage</a>
+    </div> <!--login-box-->
 </body>
 </html>
