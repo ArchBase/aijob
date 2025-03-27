@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head><title>Job Statistics</title></head>
+<body>
+    <h1>Job Applications</h1>
+    <ul>
+        {% for applicant in applicants %}
+            <li>
+                {{ applicant['username'] }}
+                <a href="/recruiter/view_applicant/{{ applicant['user_id'] }}">View Applicant</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="/recruiter/dashboard">Back</a>
+</body>
+</html>

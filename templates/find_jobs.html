@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head><title>Find Jobs</title></head>
+<body>
+    <h1>Find Jobs</h1>
+    <ul>
+        {% for job in jobs %}
+            <li>
+                <p>{{ job['description'] }}</p>
+                <a href="/user/apply/{{ job['id'] }}">Apply</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="/user/dashboard">Back to Dashboard</a>
+</body>
+</html>

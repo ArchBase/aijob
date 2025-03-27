@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head><title>Recruiter Dashboard</title></head>
+<body>
+    <h1>Recruiter Dashboard</h1>
+    <a href="/recruiter/create_job">Create Job</a>
+    <h2>Your Jobs</h2>
+    <ul>
+        {% for job in jobs %}
+            <li>
+                <p>{{ job['description'] }}</p>
+                <a href="/recruiter/view_statistics/{{ job['id'] }}">View Statistics</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="/">Logout</a>
+</body>
+</html>
