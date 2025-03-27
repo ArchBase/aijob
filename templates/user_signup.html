@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html>
-<head><title>User Signup</title></head>
+<head>
+    <title>User Signup</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
 <body>
     <h1>User Signup</h1>
     <form method="post">
         Username: <input type="text" name="username" required><br>
         Password: <input type="password" name="password" required><br>
-        Resume: <textarea name="resume" required></textarea><br>
+        Resume:<br> <textarea name="resume" required></textarea><br>
         <input type="submit" value="Signup">
     </form>
     <a href="/">Home</a>
