@@ -4,6 +4,11 @@ body{
     font-size: 1.2em;
 }
 
+header{
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
 button, input[type=submit]{
     margin: 2px;
     padding: 4px;
@@ -51,7 +56,6 @@ a:visited{
     display: flex;
     flex-direction: column;
     align-items: center; /* Center inputs */
-    gap: 10px; /* Add space between elements */
 }
 
 .login-box input {
@@ -59,4 +63,8 @@ a:visited{
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
+}
+
+.logout-btn{
+    margin-left: auto;
 }
