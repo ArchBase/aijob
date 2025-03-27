@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html>
-<head><title>Home</title></head>
+<head>
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
 <body>
-    <h1>AI Job Web App</h1>
-    <a href="/user/signup">User Signup</a> | 
-    <a href="/user/login">User Login</a> |
-    <a href="/recruiter/signup">Recruiter Signup</a> |
-    <a href="/recruiter/login">Recruiter Login</a>
+    <h1>AI Job Search Web Application</h1>
+    <h3>Looking for a Job?</h3>
+    <a href="/user/signup"><button>Sign up as User</button></a>
+    <a href="/user/login"><button>Log in as User</button></a>
+    <br>
+    <h3>Looking for talent to work for you?</h3>
+    <a href="/recruiter/signup"><button>Sign up as Recruiter</button></a>
+    <a href="/recruiter/login"><button>Log in as Recruiter</button></a>
 </body>
 </html>
