@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
-<head><title>View Applicant</title></head>
+<head>
+    <title>View Applicant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
 <body>
     <h1>Applicant Resume</h1>
     <p>{{ resume }}</p>
