@@ -1,6 +1,7 @@
 body{
     color: white;
-    background-color: #202020;
+    background: url('starry-night-sky.jpeg');
+    background-size: 100%;
     font-size: 1.2em;
     padding: 4px;
 }
@@ -10,11 +11,19 @@ header{
     grid-template-columns: auto auto;
 }
 
+h1{
+    font-size: 60px;
+}
+
+h3{
+    font-size: 30px;
+}
+
 button, input[type=submit]{
     margin: 2px;
     padding: 4px;
     border-radius: 4px;
-    font-size: 16px;
+    font-size: 24px;
     background-color: #4CAF50;
     color: whitesmoke;
     border: none;
@@ -37,19 +46,17 @@ a:visited{
 }
 
 .login-box{
-    background-color: #114a13;
+    background-color: #1a0f57;
     display: flex;
     justify-content: center;
     align-items: center;
 
     flex-direction: column;
-    gap: 10px; /* Adds space between items */
 
     border: 2px solid #eee;
     border-radius: 8px;
     padding: 8px;
 
-    width: 300px;
     position: absolute;
     top: 50%;
     left: 50%;

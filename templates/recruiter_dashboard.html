@@ -9,15 +9,16 @@
         <h1>Recruiter Dashboard</h1>
         <a href="/" class="logout-btn"><button>Logout</button></a>
     </header>
-    <a href="/recruiter/create_job">Create Job</a>
-    <h2>Your Jobs</h2>
-    <ul>
-        {% for job in jobs %}
-            <li>
-                <p>{{ job['description'] }}</p>
-                <a href="/recruiter/view_statistics/{{ job['id'] }}">View Statistics</a>
-            </li>
-        {% endfor %}
-    </ul>
+    <div class="login-box">
+        <a href="/recruiter/create_job"><button>Create Job</button></a>
+        <h2>Your Jobs</h2>
+        <ul>
+            {% for job in jobs %}
+                <li>
+                    {{ job['description'] }} <a href="/recruiter/view_statistics/{{ job['id'] }}">View Statistics</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>

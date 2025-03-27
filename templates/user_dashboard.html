@@ -9,43 +9,44 @@
         <h1>Welcome, {{ user['username'] }}</h1>
         <a class="logout-btn" href="/"><button>Logout</button></a>
     </header>
+    <div class="login-box">
+        <h2>Your Resume</h2>
+        <p id="resume-text">{{ user['resume'] }}</p>
+
+        <!-- Edit Button -->
+        <button onclick="toggleEdit()">Edit Resume</button>
+
+        <!-- Hidden Form for Editing -->
+        <form id="edit-resume-form" action="{{ url_for('update_resume') }}" method="POST" style="display: none;">
+            <textarea name="resume" rows="5" cols="40">{{ user['resume'] }}</textarea>
+            <br>
+            <input type="submit" value="Save">
+        </form>
+
+        <h2>Additional Description</h2>
+        <form action="/user/update_description" method="POST">
+            <textarea name="description" rows="4" cols="50" placeholder="Add extra details about your skills...">{{ user['description'] }}</textarea>
+            <br>
+            <input type="submit" value="Update Description">
+        </form>
+        
+        <a href="/user/find_jobs"><button>Find Jobs</button></a>
+
+        <h2>Applied Jobs</h2>
+        <ul>
+            {% for job in applied_jobs %}
+                <li>Job ID: {{ job['job_id'] }} - Status: {{ job['status'] }}
+                    <a href="/user/improvement/{{ job['job_id'] }}">View Improvement</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
     
-    <h2>Your Resume</h2>
-    <p id="resume-text">{{ user['resume'] }}</p>
-
-    <!-- Edit Button -->
-    <button onclick="toggleEdit()">Edit Resume</button>
-
-    <!-- Hidden Form for Editing -->
-    <form id="edit-resume-form" action="{{ url_for('update_resume') }}" method="POST" style="display: none;">
-        <textarea name="resume" rows="5" cols="40">{{ user['resume'] }}</textarea>
-        <br>
-        <input type="submit" value="Save">
-    </form>
-
     <script>
-    function toggleEdit() {
-        document.getElementById('resume-text').style.display = "none";
-        document.getElementById('edit-resume-form').style.display = "block";
-    }
+        function toggleEdit() {
+            document.getElementById('resume-text').style.display = "none";
+            document.getElementById('edit-resume-form').style.display = "block";
+        }
     </script>
-
-    <h2>Additional Description</h2>
-    <form action="/user/update_description" method="POST">
-        <textarea name="description" rows="4" cols="50" placeholder="Add extra details about your skills...">{{ user['description'] }}</textarea>
-        <br>
-        <input type="submit" value="Update Description">
-    </form>
-    
-    <a href="/user/find_jobs"><button>Find Jobs</button></a>
-
-    <h2>Applied Jobs</h2>
-    <ul>
-        {% for job in applied_jobs %}
-            <li>Job ID: {{ job['job_id'] }} - Status: {{ job['status'] }}
-                <a href="/user/improvement/{{ job['job_id'] }}">View Improvement</a>
-            </li>
-        {% endfor %}
-    </ul>
 </body>
 </html>
