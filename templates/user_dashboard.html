@@ -11,7 +11,24 @@
     </header>
     
     <h2>Your Resume</h2>
-    <p>{{ user['resume'] }}</p>
+    <p id="resume-text">{{ user['resume'] }}</p>
+
+    <!-- Edit Button -->
+    <button onclick="toggleEdit()">Edit Resume</button>
+
+    <!-- Hidden Form for Editing -->
+    <form id="edit-resume-form" action="{{ url_for('update_resume') }}" method="POST" style="display: none;">
+        <textarea name="resume" rows="5" cols="40">{{ user['resume'] }}</textarea>
+        <br>
+        <input type="submit" value="Save">
+    </form>
+
+    <script>
+    function toggleEdit() {
+        document.getElementById('resume-text').style.display = "none";
+        document.getElementById('edit-resume-form').style.display = "block";
+    }
+    </script>
 
     <h2>Additional Description</h2>
     <form action="/user/update_description" method="POST">

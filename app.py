@@ -206,6 +206,18 @@ def update_description():
     
     return redirect("/user/dashboard")
 
+@app.route("/user/update_resume", methods=["POST"])
+def update_resume():
+    if "user_id" not in session:
+        return redirect("/user/login")
+
+    new_resume = request.form["resume"]
+    db = get_db()
+    db.execute("UPDATE users SET resume = ? WHERE id = ?", (new_resume, session["user_id"]))
+    db.commit()
+
+    return redirect("/user/dashboard")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
