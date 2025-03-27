@@ -5,7 +5,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Recruiter Dashboard</h1>
+    <header>
+        <h1>Recruiter Dashboard</h1>
+        <a href="/" class="logout-btn"><button>Logout</button></a>
+    </header>
     <a href="/recruiter/create_job">Create Job</a>
     <h2>Your Jobs</h2>
     <ul>
@@ -16,6 +19,5 @@
             </li>
         {% endfor %}
     </ul>
-    <a href="/">Logout</a>
 </body>
 </html>

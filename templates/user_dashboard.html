@@ -5,8 +5,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>User Dashboard</h1>
-    <p>Welcome, {{ user['username'] }}</p>
+    <header>
+        <h1>Welcome, {{ user['username'] }}</h1>
+        <a class="logout-btn" href="/"><button>Logout</button></a>
+    </header>
     
     <h2>Your Resume</h2>
     <p>{{ user['resume'] }}</p>
@@ -27,6 +29,6 @@
         {% endfor %}
     </ul>
 
-    <a href="/user/find_jobs">Find Jobs</a> | <a href="/">Logout</a>
+    <a href="/user/find_jobs"><button>Find Jobs</button></a>
 </body>
 </html>
