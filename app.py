@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, session
 import sqlite3
-from ollama_ai import compare_resume_job
+from ollama_ai import compare_resume_job, compare_description_job
 
 app = Flask(__name__)
 app.secret_key = "secret"  # Needed for session handling
@@ -59,24 +59,46 @@ def user_dashboard():
 def find_jobs():
     if "user_id" not in session:
         return redirect("/user/login")
+
     db = get_db()
     jobs = db.execute("SELECT * FROM jobs").fetchall()
     user = db.execute("SELECT * FROM users WHERE id = ?", (session["user_id"],)).fetchone()
-    
-    # AI Filtering (resume vs job description)
-    filtered_jobs = [job for job in jobs if compare_resume_job(user["resume"], job["description"]) > 0.5]
-    
+
+    filtered_jobs = []
+    for job in jobs:
+        resume_score = 0
+        desc_score = compare_description_job(user["description"], job["description"])
+        if desc_score > 0.5:
+            resume_score = compare_resume_job(user["resume"], job["description"])
+            final_score = (resume_score + desc_score) / 2  # Averaging both
+        else:
+            final_score = desc_score
+
+        if final_score > 0.5:
+            filtered_jobs.append(job)
+
     return render_template("find_jobs.html", jobs=filtered_jobs)
 
-# --- Apply Job ---
+
 @app.route("/user/apply/<int:job_id>")
 def apply_job(job_id):
     if "user_id" not in session:
         return redirect("/user/login")
+    
     db = get_db()
-    db.execute("INSERT INTO applications (user_id, job_id, status) VALUES (?, ?, ?)", 
-               (session["user_id"], job_id, "Pending"))
+    
+    # Fetch user details
+    user = db.execute("SELECT * FROM users WHERE id = ?", (session["user_id"],)).fetchone()
+    job = db.execute("SELECT * FROM jobs WHERE id = ?", (job_id,)).fetchone()
+    
+    # AI Matching Score
+    match_score = compare_resume_job(user["resume"], user["description"], job["description"])
+    
+    # Insert application with match score
+    db.execute("INSERT INTO applications (user_id, job_id, status, match_score) VALUES (?, ?, ?, ?)", 
+               (session["user_id"], job_id, "Pending", match_score))
     db.commit()
+    
     return redirect("/user/dashboard")
 
 # --- Recruiter Signup ---
@@ -164,6 +186,18 @@ def view_applicant(application_id):
             return redirect("/recruiter/dashboard")
 
     return render_template("view_applicant.html", resume=application["resume"])
+
+@app.route("/user/update_description", methods=["POST"])
+def update_description():
+    if "user_id" not in session:
+        return redirect("/user/login")
+    
+    description = request.form["description"]
+    db = get_db()
+    db.execute("UPDATE users SET description = ? WHERE id = ?", (description, session["user_id"]))
+    db.commit()
+    
+    return redirect("/user/dashboard")
 
 
 if __name__ == "__main__":
