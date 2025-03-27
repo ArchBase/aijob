@@ -5,11 +5,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Create Job</h1>
-    <form method="post">
-        Enter the Job Description: <br> <textarea name="description" required></textarea><br>
-        <input type="submit" value="Submit">
-    </form>
-    <a href="/recruiter/dashboard">Back</a>
+    <div class="login-box">
+        <h1>Create Job</h1>
+        <form method="post">
+            Enter the Job Description: <br> 
+            <textarea name="description" required></textarea><br>
+            <input type="submit" value="Submit">
+        </form>
+        <a href="/recruiter/dashboard">Back</a>
+    </div>
 </body>
 </html>

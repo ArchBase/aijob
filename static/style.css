@@ -1,3 +1,7 @@
+
+
+
+
 /* General Page Styling */
 body {
     color: black;
@@ -100,6 +104,18 @@ a:visited {
     border: 1px solid darkgreen;
     border-radius: 6px;
     background: rgba(255, 255, 255, 0.5); /* More glass effect */
+}
+
+/* Align buttons vertically in line with text */
+.login-box ul li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.login-box ul li button {
+    margin-left: 10px;
 }
 
 /* Logout Button */

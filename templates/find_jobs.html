@@ -5,15 +5,16 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Find Jobs</h1>
-    <ul>
-        {% for job in jobs %}
-            <li>
-                <p>{{ job['description'] }}</p>
-                <a href="/user/apply/{{ job['id'] }}">Apply</a>
-            </li>
-        {% endfor %}
-    </ul>
-    <a href="/user/dashboard">Back to Dashboard</a>
+    <div class="login-box">
+        <h1>Find Jobs</h1>
+        <ul>
+            {% for job in jobs %}
+                <li>
+                    {{ job['description'] }} <a href="/user/apply/{{ job['id'] }}"><button>Apply now</button></a>
+                </li>
+            {% endfor %}
+        </ul>
+        <a href="/user/dashboard">Back to Dashboard</a>
+    </div>
 </body>
 </html>

@@ -5,13 +5,17 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>AI Job Search Web Application</h1>
+    <div id="welcome-message" class="hidden">
+        <h1>Welcome to AI Job Search Web Application</h1>
+    </div>
     <h3>Looking for a Job?</h3>
-    <a href="/user/signup"><button>Sign up as User</button></a>
-    <a href="/user/login"><button>Log in as User</button></a>
+    <a href="/user/signup"><button class="animated-button">Sign up as User</button></a>
+    <a href="/user/login"><button class="animated-button">Log in as User</button></a>
     <br>
     <h3>Looking for talent to work for you?</h3>
-    <a href="/recruiter/signup"><button>Sign up as Recruiter</button></a>
-    <a href="/recruiter/login"><button>Log in as Recruiter</button></a>
+    <a href="/recruiter/signup"><button class="animated-button">Sign up as Recruiter</button></a>
+    <a href="/recruiter/login"><button class="animated-button">Log in as Recruiter</button></a>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

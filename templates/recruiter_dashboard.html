@@ -15,7 +15,7 @@
         <ul>
             {% for job in jobs %}
                 <li>
-                    {{ job['description'] }} <a href="/recruiter/view_statistics/{{ job['id'] }}">View Statistics</a>
+                    {{ job['description'] }} <a href="/recruiter/view_statistics/{{ job['id'] }}"><button> View statistics</button></a>
                 </li>
             {% endfor %}
         </ul>
