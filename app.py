@@ -68,13 +68,13 @@ def find_jobs():
     for job in jobs:
         resume_score = 0
         desc_score = compare_description_job(user["description"], job["description"])
-        if desc_score > 0.5:
+        if desc_score >= 0.5:
             resume_score = compare_resume_job(user["resume"], job["description"])
             final_score = (resume_score + desc_score) / 2  # Averaging both
         else:
             final_score = desc_score
 
-        if final_score > 0.5:
+        if final_score >= 0.5:
             filtered_jobs.append(job)
 
     return render_template("find_jobs.html", jobs=filtered_jobs)
@@ -92,7 +92,7 @@ def apply_job(job_id):
     job = db.execute("SELECT * FROM jobs WHERE id = ?", (job_id,)).fetchone()
     
     # AI Matching Score
-    match_score = compare_resume_job(user["resume"], user["description"], job["description"])
+    match_score = compare_resume_job(user["resume"], job["description"])
     
     # Insert application with match score
     db.execute("INSERT INTO applications (user_id, job_id, status, match_score) VALUES (?, ?, ?, ?)", 
@@ -151,14 +151,21 @@ def create_job():
     return render_template("create_job.html")
 
 # --- View Statistics ---
+# --- View Statistics ---
 @app.route("/recruiter/view_statistics/<int:job_id>")
 def view_statistics(job_id):
     if "recruiter_id" not in session:
         return redirect("/recruiter/login")
+    
     db = get_db()
-    applicants = db.execute("SELECT * FROM applications JOIN users ON applications.user_id = users.id WHERE job_id = ?", 
-                            (job_id,)).fetchall()
+    applicants = db.execute(
+        "SELECT * FROM applications JOIN users ON applications.user_id = users.id "
+        "WHERE job_id = ? ORDER BY match_score DESC",  # Sorting by match_score in descending order
+        (job_id,)
+    ).fetchall()
+    
     return render_template("view_statistics.html", applicants=applicants)
+
 
  # --- View Applicant ---
 @app.route("/recruiter/view_applicant/<int:application_id>", methods=["GET", "POST"])
