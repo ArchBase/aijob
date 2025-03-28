@@ -67,7 +67,7 @@ def find_jobs():
     filtered_jobs = []
     for job in jobs:
         resume_score = 0
-        desc_score = compare_description_job(user["description"], job["description"])
+        desc_score = compare_description_job(user["preferences"], job["description"])
         if desc_score >= 0.5:
             resume_score = compare_resume_job(user["resume"], job["description"])
             final_score = (resume_score + desc_score) / 2  # Averaging both
@@ -194,14 +194,14 @@ def view_applicant(application_id):
 
     return render_template("view_applicant.html", resume=application["resume"])
 
-@app.route("/user/update_description", methods=["POST"])
-def update_description():
+@app.route("/user/update_preferences", methods=["POST"])
+def update_preferences():
     if "user_id" not in session:
         return redirect("/user/login")
     
-    description = request.form["description"]
+    preferences = request.form["preferences"]
     db = get_db()
-    db.execute("UPDATE users SET description = ? WHERE id = ?", (description, session["user_id"]))
+    db.execute("UPDATE users SET preferences = ? WHERE id = ?", (preferences, session["user_id"]))
     db.commit()
     
     return redirect("/user/dashboard")
