@@ -158,17 +158,17 @@ def view_statistics(job_id):
         return redirect("/recruiter/login")
     
     db = get_db()
-    applicants = db.execute(
+    applications = db.execute(
         "SELECT * FROM applications JOIN users ON applications.user_id = users.id "
         "WHERE job_id = ? ORDER BY match_score DESC",  # Sorting by match_score in descending order
         (job_id,)
     ).fetchall()
     
-    return render_template("view_statistics.html", applicants=applicants)
+    return render_template("view_statistics.html", applications=applications)
 
 
  # --- View Applicant ---
-@app.route("/recruiter/view_applicant/<int:application_id>", methods=["GET", "POST"])
+@app.route("/recruiter/view_application/<int:application_id>", methods=["GET", "POST"])
 def view_applicant(application_id):
     if "recruiter_id" not in session:
         return redirect("/recruiter/login")
@@ -192,7 +192,7 @@ def view_applicant(application_id):
             db.commit()
             return redirect("/recruiter/dashboard")
 
-    return render_template("view_applicant.html", resume=application["resume"])
+    return render_template("view_applicantion.html", resume=application["resume"])
 
 @app.route("/user/update_preferences", methods=["POST"])
 def update_preferences():

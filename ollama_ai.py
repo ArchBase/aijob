@@ -2,6 +2,7 @@ import ollama
 import re
 
 def compare_resume_job(resume, job_desc):
+    return 1
     prompt = f"Compare this resume:'\n{resume}\n'with this job description:'\n{job_desc}\n'Give a match score (0-1). Just give the score as output, don't explain anything else."
     print(f"prompt: {prompt}")
     response = ollama.chat("mistral:7b-instruct", messages=[{"role": "user", "content": prompt}])
@@ -17,6 +18,7 @@ def compare_resume_job(resume, job_desc):
         raise ValueError(f"Unexpected response: {response['message']['content']}")
 
 def compare_description_job(description, job_desc):
+    return 1
     prompt = f"Compare this conditions:'\n{description}\n'with this job description:'\n{job_desc}\n'Give a match score (0-1). Just give the score as output, don't explain anything else."
     print(f"prompt: {prompt}")
     response = ollama.chat("mistral:7b-instruct", messages=[{"role": "user", "content": prompt}])

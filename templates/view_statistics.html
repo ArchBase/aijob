@@ -8,10 +8,10 @@
     <div class="login-box">
         <h1>Job Applications</h1>
         <ul>
-            {% for applicant in applicants %}
+            {% for application in applications %}
                 <li>
-                    {{ applicant['username'] }}
-                    <a href="/recruiter/view_applicant/{{ applicant['user_id'] }}"><button>View applicant</button></a>
+                    {{ application['username'] }}
+                    <a href="/recruiter/view_application/{{ application['id'] }}"><button>View applicant</button></a>
                 </li>
             {% endfor %}
         </ul>
