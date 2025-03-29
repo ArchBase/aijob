@@ -36,5 +36,9 @@ def compare_description_job(description, job_desc):
 
 
 def get_best_job_based_on_preference_and_resume(job1, job2, preferences, resume):
-    print(f"job1:{job1['description']}\njob2:{job2['description']}\npreferences:{preferences}\nresume:{resume}\n\n")
-    return random.choice([1, 2])
+    print(f"job1:{job1['description']}\njob2:{job2['description']}\npreferences:{preferences}\nresume:{resume}\n")
+    winner = 1
+    if int(job2['description']) > int(job1['description']):
+        winner = 2
+    print(f"Winner:{winner}\n\n")
+    return winner
