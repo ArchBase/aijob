@@ -22,7 +22,7 @@ def get_best_job_based_on_preference_and_resume(job1, job2, preferences, resume)
     response_text = response["message"]["content"].strip()
     
     # Use regex to extract the first occurrence of '1' or '2' as a standalone number
-    match = re.search(r'\b(1|2)\b', response_text)
+    match = re.search(r'\b(1|2|0)\b', response_text)
 
     if match:
         winner = int(match.group(1))
