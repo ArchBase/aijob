@@ -86,7 +86,6 @@ def tournament_ranking(jobs, user_preferences, user_resume):
         ranking.append(best_job)  # Add it to the ranking
         jobs.remove(best_job)  # Remove it from the list and repeat
     
-    print(ranking)
     return ranking
 
 @app.route("/user/find_jobs")
