@@ -101,13 +101,13 @@ def find_jobs():
         return render_template("find_jobs.html", jobs=[], jobs_pref=[], jobs_resume=[], jobs_both=[])
 
     # Generate rankings based on different criteria
-    ranked_by_preferences = tournament_ranking(jobs[:], user["preferences"], user["resume"], mode="preferences")
-    ranked_by_resume = tournament_ranking(jobs[:], user["preferences"], user["resume"], mode="resume")
+    #ranked_by_preferences = tournament_ranking(jobs[:], user["preferences"], user["resume"], mode="preferences")
+    #ranked_by_resume = tournament_ranking(jobs[:], user["preferences"], user["resume"], mode="resume")
     ranked_by_both = tournament_ranking(jobs[:], user["preferences"], user["resume"], mode="both")
 
     return render_template("find_jobs.html", 
-                           jobs_pref=ranked_by_preferences, 
-                           jobs_resume=ranked_by_resume, 
+                           #jobs_pref=ranked_by_preferences, 
+                           #jobs_resume=ranked_by_resume, 
                            jobs_both=ranked_by_both)
 
 
