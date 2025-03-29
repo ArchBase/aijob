@@ -25,6 +25,8 @@ def get_best_job_based_on_preference_and_resume(job1, job2, preferences, resume)
     match = re.search(r'\b(1|2)\b', response_text)
 
     if match:
-        return int(match.group(1))
+        winner = int(match.group(1))
+        print(f"winner: {winner}\n")
+        return winner
     else:
         raise ValueError(f"Unexpected response from AI: {response_text}")

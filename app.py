@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, session
 import sqlite3
-from ollama_ai import compare_resume_job, compare_description_job, get_best_job_based_on_preference_and_resume
+from ollama_ai import get_best_job_based_on_preference_and_resume
 
 app = Flask(__name__)
 app.secret_key = "secret"  # Needed for session handling
