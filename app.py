@@ -62,9 +62,8 @@ def user_dashboard():
 
     return render_template("user_dashboard.html", user=user, applied_jobs=applied_jobs)
 
-# Tournament ranking function
-def tournament_ranking(jobs, user_preferences, user_resume):
-    ranking = []  # Final sorted ranking
+def tournament_ranking(jobs, user_preferences, user_resume, mode="both"):
+    ranking = []
 
     while jobs:
         current_round = jobs[:]
@@ -73,20 +72,21 @@ def tournament_ranking(jobs, user_preferences, user_resume):
             for i in range(0, len(current_round), 2):
                 if i + 1 < len(current_round):
                     winner_index = get_best_job_based_on_preference_and_resume(
-                        current_round[i], current_round[i + 1], user_preferences, user_resume
+                        current_round[i], current_round[i + 1], user_preferences, user_resume, mode
                     )
                     winner = current_round[i] if winner_index == 1 else current_round[i + 1]
                     loser = current_round[i] if winner_index == 2 else current_round[i + 1]
                     next_round.append(winner)
                 else:
-                    next_round.append(current_round[i])  # Odd item advances
+                    next_round.append(current_round[i])
             current_round = next_round
-        
-        best_job = current_round[0]  # The last remaining job is the best
-        ranking.append(best_job)  # Add it to the ranking
-        jobs.remove(best_job)  # Remove it from the list and repeat
-    
+
+        best_job = current_round[0]
+        ranking.append(best_job)
+        jobs.remove(best_job)
+
     return ranking
+
 
 @app.route("/user/find_jobs")
 def find_jobs():
@@ -98,12 +98,18 @@ def find_jobs():
     user = db.execute("SELECT * FROM users WHERE id = ?", (session["user_id"],)).fetchone()
 
     if not jobs:
-        return render_template("find_jobs.html", jobs=[])
+        return render_template("find_jobs.html", jobs=[], jobs_pref=[], jobs_resume=[], jobs_both=[])
 
-    # Rank jobs using AI-based tournament approach
-    ranked_jobs = tournament_ranking(jobs, user["preferences"], user["resume"])
+    # Generate rankings based on different criteria
+    ranked_by_preferences = tournament_ranking(jobs[:], user["preferences"], user["resume"], mode="preferences")
+    ranked_by_resume = tournament_ranking(jobs[:], user["preferences"], user["resume"], mode="resume")
+    ranked_by_both = tournament_ranking(jobs[:], user["preferences"], user["resume"], mode="both")
 
-    return render_template("find_jobs.html", jobs=ranked_jobs)
+    return render_template("find_jobs.html", 
+                           jobs_pref=ranked_by_preferences, 
+                           jobs_resume=ranked_by_resume, 
+                           jobs_both=ranked_by_both)
+
 
 @app.route("/user/apply/<int:job_id>")
 def apply_job(job_id):

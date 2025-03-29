@@ -2,34 +2,34 @@ import ollama
 import re
 import random
 
-def get_best_job_based_on_preference_and_resume(job1, job2, preferences, resume):
-    # Print reference for debugging
-    print(f"job1: {job1['title'] + " " + job1['description']}\njob2:{job2['title'] + " " + job2['description']}\npreferences: {preferences}\nresume: {resume}\n")
+def get_best_job_based_on_preference_and_resume(job1, job2, preferences, resume, mode="both"):
+    prompt = f"{preferences} these are preferences of a jobseeker, {resume} this is his resume.\n"
 
-    # Construct the prompt
-    prompt = (
-        f"{preferences} these are preferences of a jobseeker, {resume} this is his resume.\n"
-        f"There are two jobs:\n"
-        f"1. {job1['title'] + " " + job1['description']}\n"
-        f"2. {job2['title'] + " " + job2['description']}\n"
-        f"Based on jobseeker's preferences and resume, which job is the best for him? Say 1 or 2 or 0(represents both jobs isn't good for jobseeker), nothing else."
-    )
+    if mode == "preferences":
+        prompt += (f"There are two jobs:\n1. {job1['title']} {job1['description']}\n"
+                   f"2. {job2['title']} {job2['description']}\n"
+                   f"Based only on the jobseeker's preferences, which job is better? Say 1 or 2 or 0(if both are good or bad). don't say anything else")
+    elif mode == "resume":
+        prompt += (f"There are two jobs:\n1. {job1['title']} {job1['description']}\n"
+                   f"2. {job2['title']} {job2['description']}\n"
+                   f"Based only on the jobseeker's resume, which job is better? Say 1 or 2 or (if both are good or bad). don't say anything else")
+    else:
+        prompt += (f"There are two jobs:\n1. {job1['title']} {job1['description']}\n"
+                   f"2. {job2['title']} {job2['description']}\n"
+                   f"Based on both preferences and resume, which job is better? Say 1 or 2 or 0(if both are good or bad). don't say anything else")
 
-    # Get response from Ollama
-    response = ollama.chat(model="mistral", messages=[{"role": "user", "content": prompt}])
-
-    # Extract response text
+    print(f"\nPrompt: {prompt}")
+    response = ollama.chat(model="llama3.2", messages=[{"role": "user", "content": prompt}])
     response_text = response["message"]["content"].strip()
-    
-    # Use regex to extract the first occurrence of '1' or '2' as a standalone number
+    print(f"\nAI response: {response_text}\n")
+
     match = re.search(r'\b(1|2|0)\b', response_text)
 
     if match:
         winner = int(match.group(1))
-        print(f"winner: {winner}\n")
         if winner == 0:
-            print("no one won, choosing a random\n")
-            winner = random.choice([1, 2])
+            winner = random.choice([1, 2])  # Choose randomly if no clear winner
         return winner
     else:
-        raise ValueError(f"Unexpected response from AI: {response_text}")
+        print("AI failed to answer")
+        return random.choice([1, 2])

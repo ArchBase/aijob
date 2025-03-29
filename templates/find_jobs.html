@@ -7,8 +7,10 @@
 <body>
     <div class="login-box">
         <h1>Find Jobs</h1>
+
+        <h2>Jobs Sorted by Preferences</h2>
         <ul>
-            {% for job in jobs %}
+            {% for job in jobs_pref %}
                 <li>
                     {{ job['title'] }} 
                     <a href="/user/apply_now/{{ job['id'] }}">
@@ -17,6 +19,31 @@
                 </li>
             {% endfor %}
         </ul>
+
+        <h2>Jobs Sorted by Resume Match</h2>
+        <ul>
+            {% for job in jobs_resume %}
+                <li>
+                    {{ job['title'] }} 
+                    <a href="/user/apply_now/{{ job['id'] }}">
+                        <button>View & Apply</button>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <h2>Jobs Sorted by Both (Preferences + Resume)</h2>
+        <ul>
+            {% for job in jobs_both %}
+                <li>
+                    {{ job['title'] }} 
+                    <a href="/user/apply_now/{{ job['id'] }}">
+                        <button>View & Apply</button>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+
         <a href="/user/dashboard">Back to Dashboard</a>
     </div>
 </body>
