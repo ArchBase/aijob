@@ -7,53 +7,16 @@
 <body>
     <div class="login-box">
         <h1>Find Jobs</h1>
-
-        {% if rounds %}
-            <h2>🏆 Final Winner</h2>
-            <ul>
+        <ul>
+            {% for job in jobs %}
                 <li>
-                    {{ rounds[-1][0][2]['title'] }} 
-                    <a href="/user/apply_now/{{ rounds[-1][0][2]['id'] }}">
+                    {{ job['title'] }} 
+                    <a href="/user/apply_now/{{ job['id'] }}">
                         <button>View & Apply</button>
                     </a>
                 </li>
-            </ul>
-
-            {% for round_num in range(len(rounds)-1, -1, -1) %}
-                <h2>
-                    {% if round_num == len(rounds)-1 %}
-                        🏅 Final
-                    {% elif round_num == len(rounds)-2 %}
-                        🥈 Semifinal
-                    {% elif round_num == len(rounds)-3 %}
-                        🥉 Quarterfinal
-                    {% else %}
-                        Round {{ len(rounds) - round_num }}
-                    {% endif %}
-                </h2>
-                <ul>
-                    {% for job1, job2, winner in rounds[round_num] %}
-                        <li>
-                            {{ winner['title'] }} (Winner)
-                            <a href="/user/apply_now/{{ winner['id'] }}">
-                                <button>View & Apply</button>
-                            </a>
-                        </li>
-                        {% if job2 %}
-                        <li>
-                            {{ job1['title'] if winner['id'] != job1['id'] else job2['title'] }} (Eliminated)
-                            <a href="/user/apply_now/{{ job1['id'] if winner['id'] != job1['id'] else job2['id'] }}">
-                                <button>View & Apply</button>
-                            </a>
-                        </li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
             {% endfor %}
-        {% else %}
-            <p>No jobs available.</p>
-        {% endif %}
-
+        </ul>
         <a href="/user/dashboard">Back to Dashboard</a>
     </div>
 </body>

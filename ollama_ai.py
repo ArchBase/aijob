@@ -1,5 +1,6 @@
 import ollama
 import re
+import random
 
 def compare_resume_job(resume, job_desc):
     return 1
@@ -34,6 +35,6 @@ def compare_description_job(description, job_desc):
         raise ValueError(f"Unexpected response: {response['message']['content']}")
 
 
-
 def get_best_job_based_on_preference_and_resume(job1, job2, preferences, resume):
-    return 1
+    print(f"job1:{job1['description']}\njob2:{job2['description']}\npreferences:{preferences}\nresume:{resume}\n\n")
+    return random.choice([1, 2])
