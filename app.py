@@ -49,9 +49,17 @@ def user_login():
 def user_dashboard():
     if "user_id" not in session:
         return redirect("/user/login")
+    
     db = get_db()
     user = db.execute("SELECT * FROM users WHERE id = ?", (session["user_id"],)).fetchone()
-    applied_jobs = db.execute("SELECT * FROM applications WHERE user_id = ?", (session["user_id"],)).fetchall()
+
+    applied_jobs = db.execute("""
+        SELECT applications.job_id, applications.status, jobs.title 
+        FROM applications 
+        JOIN jobs ON applications.job_id = jobs.id 
+        WHERE applications.user_id = ?
+    """, (session["user_id"],)).fetchall()
+
     return render_template("user_dashboard.html", user=user, applied_jobs=applied_jobs)
 
 # --- Find Jobs ---
@@ -70,7 +78,7 @@ def find_jobs():
         desc_score = compare_description_job(user["preferences"], job["description"])
         if desc_score >= 0.5:
             resume_score = compare_resume_job(user["resume"], job["description"])
-            final_score = (resume_score + desc_score) / 2  # Averaging both
+            final_score = (resume_score + desc_score) / 2
         else:
             final_score = desc_score
 
@@ -80,26 +88,24 @@ def find_jobs():
     return render_template("find_jobs.html", jobs=filtered_jobs)
 
 
+
 @app.route("/user/apply/<int:job_id>")
 def apply_job(job_id):
     if "user_id" not in session:
         return redirect("/user/login")
     
     db = get_db()
-    
-    # Fetch user details
     user = db.execute("SELECT * FROM users WHERE id = ?", (session["user_id"],)).fetchone()
     job = db.execute("SELECT * FROM jobs WHERE id = ?", (job_id,)).fetchone()
     
-    # AI Matching Score
     match_score = compare_resume_job(user["resume"], job["description"])
     
-    # Insert application with match score
     db.execute("INSERT INTO applications (user_id, job_id, status, match_score) VALUES (?, ?, ?, ?)", 
                (session["user_id"], job_id, "Pending", match_score))
     db.commit()
     
     return redirect("/user/dashboard")
+
 
 # --- Recruiter Signup ---
 @app.route("/recruiter/signup", methods=["GET", "POST"])
@@ -132,8 +138,12 @@ def recruiter_login():
 def recruiter_dashboard():
     if "recruiter_id" not in session:
         return redirect("/recruiter/login")
+
     db = get_db()
-    jobs = db.execute("SELECT * FROM jobs WHERE recruiter_id = ?", (session["recruiter_id"],)).fetchall()
+    jobs = db.execute("""
+        SELECT id, title FROM jobs WHERE recruiter_id = ?
+    """, (session["recruiter_id"],)).fetchall()
+
     return render_template("recruiter_dashboard.html", jobs=jobs)
 
 # --- Create Job ---
@@ -142,13 +152,15 @@ def create_job():
     if "recruiter_id" not in session:
         return redirect("/recruiter/login")
     if request.method == "POST":
+        title = request.form["title"]
         description = request.form["description"]
         db = get_db()
-        db.execute("INSERT INTO jobs (recruiter_id, description) VALUES (?, ?)", 
-                   (session["recruiter_id"], description))
+        db.execute("INSERT INTO jobs (recruiter_id, title, description) VALUES (?, ?, ?)", 
+                   (session["recruiter_id"], title, description))
         db.commit()
         return redirect("/recruiter/dashboard")
     return render_template("create_job.html")
+
 
 # --- View Statistics ---
 # --- View Statistics ---
@@ -175,10 +187,12 @@ def view_applicant(application_id):
     
     db = get_db()
     
-    # Fetch applicant details
     application = db.execute(
-        "SELECT applications.id AS app_id, users.resume, applications.status FROM applications "
-        "JOIN users ON applications.user_id = users.id WHERE applications.id = ?",
+        "SELECT applications.id AS app_id, users.resume, applications.status, jobs.title "
+        "FROM applications "
+        "JOIN users ON applications.user_id = users.id "
+        "JOIN jobs ON applications.job_id = jobs.id "
+        "WHERE applications.id = ?",
         (application_id,)
     ).fetchone()
     
@@ -192,7 +206,8 @@ def view_applicant(application_id):
             db.commit()
             return redirect("/recruiter/dashboard")
 
-    return render_template("view_applicantion.html", resume=application["resume"])
+    return render_template("view_application.html", resume=application["resume"], title=application["title"])
+
 
 @app.route("/user/update_preferences", methods=["POST"])
 def update_preferences():
@@ -217,6 +232,17 @@ def update_resume():
     db.commit()
 
     return redirect("/user/dashboard")
+
+@app.route("/user/apply_now/<int:job_id>")
+def apply_now(job_id):
+    if "user_id" not in session:
+        return redirect("/user/login")
+    
+    db = get_db()
+    job = db.execute("SELECT * FROM jobs WHERE id = ?", (job_id,)).fetchone()
+
+    return render_template("apply_now.html", job=job)
+
 
 
 if __name__ == "__main__":

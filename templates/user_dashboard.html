@@ -23,7 +23,7 @@
             <input type="submit" value="Save">
         </form>
 
-        <h2>Additional Description</h2>
+        <h2>Preferences</h2>
         <form action="/user/update_preferences" method="POST">
             <textarea name="preferences" rows="4" cols="50" placeholder="Add extra details about your skills...">{{ user['preferences'] }}</textarea>
             <br>
@@ -35,8 +35,9 @@
         <h2>Applied Jobs</h2>
         <ul>
             {% for job in applied_jobs %}
-                <li>Job ID: {{ job['job_id'] }} - Status: {{ job['status'] }}
-                    <a href="/user/improvement/{{ job['job_id'] }}"></a>
+                <li>
+                    <strong>{{ job['title'] }}</strong> - Status: {{ job['status'] }}
+                    <a href="/user/improvement/{{ job['job_id'] }}">Get Improvement</a>
                 </li>
             {% endfor %}
         </ul>

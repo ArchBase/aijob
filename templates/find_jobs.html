@@ -10,7 +10,10 @@
         <ul>
             {% for job in jobs %}
                 <li>
-                    {{ job['description'] }} <a href="/user/apply/{{ job['id'] }}"><button>Apply now</button></a>
+                    {{ job['title'] }} 
+                    <a href="/user/apply_now/{{ job['id'] }}">
+                        <button>View & Apply</button>
+                    </a>
                 </li>
             {% endfor %}
         </ul>

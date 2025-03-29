@@ -5,7 +5,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Applicant Resume</h1>
+    <h1>Application for {{ title }}</h1>
+    <h2>Applicant Resume</h2>
     <p>{{ resume }}</p>
     <form method="post">
         <input type="submit" name="action" value="Accept">

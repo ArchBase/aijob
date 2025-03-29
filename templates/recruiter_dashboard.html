@@ -11,11 +11,13 @@
     </header>
     <div class="login-box">
         <a href="/recruiter/create_job"><button>Create Job</button></a>
+        
         <h2>Your Jobs</h2>
         <ul>
             {% for job in jobs %}
                 <li>
-                    {{ job['description'] }} <a href="/recruiter/view_statistics/{{ job['id'] }}"><button> View statistics</button></a>
+                    <strong>{{ job['title'] }}</strong> 
+                    <a href="/recruiter/view_statistics/{{ job['id'] }}"><button>View Statistics</button></a>
                 </li>
             {% endfor %}
         </ul>

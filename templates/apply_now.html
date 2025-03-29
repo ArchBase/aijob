@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Apply for Job</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="login-box">
+        <h1>{{ job['title'] }}</h1>
+        <p>{{ job['description'] }}</p>
+        <a href="/user/apply/{{ job['id'] }}">
+            <button>Apply Now</button>
+        </a>
+        <br><br>
+        <a href="/user/find_jobs">Back to Job Listings</a>
+    </div>
+</body>
+</html>
