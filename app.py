@@ -120,7 +120,7 @@ def apply_job(job_id):
     user = db.execute("SELECT * FROM users WHERE id = ?", (session["user_id"],)).fetchone()
     job = db.execute("SELECT * FROM jobs WHERE id = ?", (job_id,)).fetchone()
     
-    match_score = compare_resume_job(user["resume"], job["description"])
+    match_score = 0
     
     db.execute("INSERT INTO applications (user_id, job_id, status, match_score) VALUES (?, ?, ?, ?)", 
                (session["user_id"], job_id, "Pending", match_score))

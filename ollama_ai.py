@@ -31,8 +31,11 @@ def get_best_job_based_on_preference_and_resume(job1, job2, preferences, resume,
                   f"Say 1 or 2 or 0 (if both are equally good or bad). Don't say anything else.")
 
     print(f"\nPrompt: {prompt}")
-    response = ollama.chat(model="gemma3", messages=[{"role": "user", "content": prompt}])
+    response = ollama.chat(model="mistral", messages=[{"role": "user", "content": prompt}])
     response_text = response["message"]["content"].strip()
+    # Remove <think>...</think> if DeepSeek includes it
+    response_text = re.sub(r'<think>.*?</think>', '', response_text, flags=re.DOTALL).strip()
+
     print(f"\nAI response: {response_text}\n")
 
     match = re.search(r'\b(1|2|0)\b', response_text)
