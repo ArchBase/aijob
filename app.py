@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, session
 import sqlite3
-from ollama_ai import compare_resume_job, compare_description_job
+from ollama_ai import compare_resume_job, compare_description_job, get_best_job_based_on_preference_and_resume
 
 app = Flask(__name__)
 app.secret_key = "secret"  # Needed for session handling
@@ -62,7 +62,36 @@ def user_dashboard():
 
     return render_template("user_dashboard.html", user=user, applied_jobs=applied_jobs)
 
-# --- Find Jobs ---
+
+def tournament_ranking(jobs, user_preferences, user_resume):
+    """Runs a tournament to rank jobs based on AI selection."""
+    remaining_jobs = list(jobs)  # Ensure a mutable copy
+    ranking = []  # Final sorted ranking
+
+    while remaining_jobs:
+        # Run a tournament and get the best job
+        current_round = list(remaining_jobs)  # Copy current round jobs
+        while len(current_round) > 1:
+            next_round = []
+            for i in range(0, len(current_round), 2):
+                if i + 1 < len(current_round):
+                    winner = get_best_job_based_on_preference_and_resume(
+                        current_round[i], current_round[i + 1], user_preferences, user_resume
+                    )
+                    next_round.append(winner)
+                else:
+                    next_round.append(current_round[i])  # Odd item advances
+            current_round = next_round
+
+        best_job = current_round[0]  # The last remaining job is the best
+        ranking.append(best_job)  # Add it to the ranking
+
+        # Ensure best_job is removed from remaining_jobs properly
+        remaining_jobs = [job for job in remaining_jobs if job['id'] != best_job['id']]  # Remove by ID
+
+    return ranking
+
+
 @app.route("/user/find_jobs")
 def find_jobs():
     if "user_id" not in session:
@@ -72,22 +101,12 @@ def find_jobs():
     jobs = db.execute("SELECT * FROM jobs").fetchall()
     user = db.execute("SELECT * FROM users WHERE id = ?", (session["user_id"],)).fetchone()
 
-    filtered_jobs = []
-    for job in jobs:
-        resume_score = 0
-        desc_score = compare_description_job(user["preferences"], job["description"])
-        if desc_score >= 0.5:
-            resume_score = compare_resume_job(user["resume"], job["description"])
-            final_score = (resume_score + desc_score) / 2
-        else:
-            final_score = desc_score
+    if not jobs:
+        return render_template("find_jobs.html", jobs=[])
 
-        if final_score >= 0.5:
-            filtered_jobs.append(job)
+    ranked_jobs = tournament_ranking(jobs, user["preferences"], user["resume"])
 
-    return render_template("find_jobs.html", jobs=filtered_jobs)
-
-
+    return render_template("find_jobs.html", jobs=ranked_jobs)
 
 @app.route("/user/apply/<int:job_id>")
 def apply_job(job_id):

@@ -35,3 +35,5 @@ def compare_description_job(description, job_desc):
 
 
 
+def get_best_job_based_on_preference_and_resume(job1, job2, preferences, resume):
+    return 1
